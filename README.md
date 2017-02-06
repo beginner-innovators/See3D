@@ -1,1 +1,1 @@
-# TechOlympics2017
+# See3D - TechOlympics Showcase Project
