@@ -28,6 +28,8 @@ html,
 body {
   height: 100%;
   background-image: url("cover_background.jpg");
+  background-size: cover;
+  background-repeat: no-repeat;
 }
 body {
   color: #fff;
