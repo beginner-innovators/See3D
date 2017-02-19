@@ -1,0 +1,12 @@
+{% extends "base.html" %}
+{% block content %}
+    {% if user %}
+    <h1>Hi, {{ user.username }}</h1>
+    {% for request in user.requests %}
+    <div><p><a href="/profile/{{ request.user }}">{{ request.user }}</a> - {{ request.body }}</p></div>
+    {% endfor %}
+
+    {% else %}
+    <h3>Sorry, this user does not exist.</h3>
+    {% endif %}
+{% endblock %}
