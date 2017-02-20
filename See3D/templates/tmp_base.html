@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        {% if title %}
+        <title>{{ title }} - See3D</title>
+        {% else %}
+        <title>See3D</title>
+        {% endif %}
+        {% block heading %}{% endblock %}
+    </head>
+
+    <body>
+        <div>
+            <h3><a href="/">See3D</a></h3>
+            <nav>
+                <ul>
+                    <li><a href="/">Home</a></li>
+                    <li><a href="/profile/">Profile</a></li>
+                </ul>
+            </nav>
+        </div>
+
+        <hr>
+        {% block content %}{% endblock %}
+    </body>
+</html>
+
