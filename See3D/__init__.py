@@ -1,4 +1,10 @@
 from flask import Flask
-app = Flask(__name__)
+from flask_sqlalchemy import SQLAlchemy
 
-from See3D import views       # Placed at end to avoid circular references
+app = Flask(__name__)
+app.config.from_object('config')
+
+db = SQLAlchemy(app)
+
+# Import data from each file at the end.
+from See3D import views, models

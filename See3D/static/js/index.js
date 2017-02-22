@@ -1,5 +1,5 @@
 function onSignIn(googleUser) {
-  // Get ID token from successfully logged in user.
+  // Get ID token from successfully logged in user (requires HTTPS).
   var id_token = googleUser.getAuthResponse().id_token;
 
   // Send the ID token to backend with an HTTPS POST request.
