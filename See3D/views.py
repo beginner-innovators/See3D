@@ -1,5 +1,9 @@
-from flask import render_template
 from See3D import app
+
+from flask import render_template, flash
+from flask_login import login_user, logout_user, current_user, login_required
+
+from auth import AuthenticationException
 
 @app.route('/')
 @app.route('/index/')
@@ -17,3 +21,30 @@ def gallery():
 @app.route('/profile/')
 def profile():
     return render_template('profile.html', title="Profile")
+
+### Authentication Views ###
+@app.route('/authorize/<provider>')
+def oauth2authorize(provider):
+    if not current_user.is_anonymous():
+        return redirect(url_for('index'))
+
+    oauth = OAuthSignIn.get_provider(provider)
+    return oauth.authorize()
+
+@app.route('/callback/<provider>')
+def oauth2callback(provider):
+    if not current_user.is_anonymouse():
+        return redirect(url_for('index'))
+
+    oauth = OAuthSignIn.get_provider(provider)
+
+    try:
+        user_info = oauth.callback()       # Returns a JSON list of information about user
+
+    except AuthenticationException:
+        flash("Login failed - the request seems to be intended for another app.")
+        return redirect(url_for('index'))
+
+    
+
+    email = user_info['email']
