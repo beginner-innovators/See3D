@@ -1,16 +1,8 @@
 {% extends "base.html" %}
 
-{% block heading %}
-    <script src="static/js/index.js"></script>
-    <script src="https://apis.google.com/js/platform.js" async defer></script>
-    <meta name="google-signin-client_id" content="151432626794-3svgnd49h2fjmngk1cuatmrmna5n05jl.apps.googleusercontent.com">
-{% endblock %}
-
 {% block content %}
     <div><h1>Put the world at your fingertips.</h1></div>
     <div><p>Whether you are a creator or requesting a model, See3D lets you experience the world through the newest technologies in 3D printing.</p></div>
 
-    <div class="g-signin2" data-onsuccess="onSignIn"></div>
-
-    <div><p><a href="" onclick="signOut();">Sign out</a></p></div>
+    <div><p><a href={{ url_for("oauth2callback") }}>Log in with Google</a></p></div>
 {% endblock %}
