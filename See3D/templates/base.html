@@ -10,13 +10,13 @@
     <meta name="author" content="">
     <link rel="icon" href="{{ url_for('static', filename='favicon.ico') }}">
 
-    {% if title %}
+    {% if title -%}
     <title>{{ title }} - See3D</title>
-    {% else %}
+    {% else -%}
     <title>See3D</title>
-    {% endif %}
+    {% endif -%}
 
-    {% block heading %}{% endblock %}
+    {% block heading -%}{% endblock -%}
 
     <!-- Bootstrap core CSS -->
     <link href="{{ url_for('static', filename='bootstrap/css/bootstrap.min.css') }}" rel="stylesheet">
@@ -71,13 +71,17 @@
 
           </ul>
           <ul class="nav navbar-nav navbar-right">
-            <li><a href="/profile/">Profile</a></li>
+            {% if current_user.is_authenticated -%}
+            <li><a href="/profile/">{{ current_user.email|e }}</a></li>
+            {% else -%}
+            <li><a href="/oauth2callback">Sign in with Google</a></li>
+            {% endif -%}
           </ul>
         </div><!--/.nav-collapse -->
       </div>
     </nav>
 
-    {% block content %}{% endblock %}
+    {% block content -%}{% endblock -%}
 
     <!-- Bootstrap core JavaScript
     ================================================== -->

@@ -1,5 +1,11 @@
 {% extends "base.html" %}
 
 {% block content %}
-    <h3>This is where the user will be able to view their profile.</h3>
+    {% set name, address = current_user.email.split('@') %}
+    <div><h2>Hello, <strong>{{ name|e }}</strong>!</h2></div>
+    <div>
+        <h3>Options</h3>
+        <ul>
+            <li><a href={{ url_for("logout") }}>Log out</a></li>
+        </ul>
 {% endblock %}

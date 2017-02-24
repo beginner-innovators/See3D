@@ -1,5 +1,19 @@
 {% extends "base.html" %}
 
 {% block content %}
-    <h3>This is where all of the user requests will be visible.</h3>
+  <h2>Welcome to the gallery. Here you can see all available requests.</h2>
+  {% if current_user.is_authenticated -%}
+    <div><a href={{ url_for('submit') }}>Submit a request</a></div>
+  {% endif -%}
+  {% for request in requests -%}
+    <div>
+      <a href={{ url_for('request', request_id=request.id) }}>
+        <div>
+          <h3>{{ request.title|e }}</h3>
+          <p>{{ request.description|e }}</p>
+        </div>
+      </a>
+      <p>{{ request.user.email|e }}</p>
+    </div>
+  {% endfor -%}
 {% endblock %}
