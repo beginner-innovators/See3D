@@ -1,0 +1,12 @@
+{% extends "base.html" %}
+
+{% block content %}
+  <h2>Submit a request</h2>
+  <p>Include a descriptive body that states precisely what kind of model you want. Don't worry about making a mistake, you can always update this again later.</p>
+  <form action="" method="post">
+    {{ form.csrf_token() }}
+    {{ form.title(size=20, placeholder='Title') }} <br>
+    {{ form.description(cols="20", rows="30", placeholder='Description') }} <br>
+    <input type="submit" value="Submit Request"> <a href={{ url_for('gallery') }}>Cancel</a>
+  </form>
+{% endblock %}

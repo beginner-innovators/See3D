@@ -17,3 +17,18 @@ class User(UserMixin, db.Model):
     def __repr__(self):
         return '<User {}>'.format(self.email)
 
+
+class Request(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+
+    title = db.Column(db.String(16))
+    description = db.Column(db.String(64))
+    email = db.Column(db.String(254))
+
+    def __init__(self, title, description, email):
+        self.title = title
+        self.description = description
+        self.email = email
+
+    def __repr__(self):
+        return '<Request {} - {}>'.format(self.id, self.title)

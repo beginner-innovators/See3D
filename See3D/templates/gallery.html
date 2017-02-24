@@ -1,9 +1,11 @@
 {% extends "base.html" %}
 
 {% block content %}
-  <h2>Welcome to the gallery. Here you can see all available requests.</h2>
+  <h2>Welcome to the gallery! Here you can see all available requests.</h2>
   {% if current_user.is_authenticated -%}
     <div><a href={{ url_for('submit') }}>Submit a request</a></div>
+  {% else -%}
+    <div><a href={{ url_for('oauth2callback') }}>Sign in to submit a request</a></div>
   {% endif -%}
   {% for request in requests -%}
     <div>
@@ -13,7 +15,7 @@
           <p>{{ request.description|e }}</p>
         </div>
       </a>
-      <p>{{ request.user.email|e }}</p>
+      <p>{{ request.email|e }}</p>
     </div>
   {% endfor -%}
 {% endblock %}

@@ -2,11 +2,12 @@ import json
 
 import httplib2
 import flask
-from flask_login import login_required, login_user, logout_user
+from flask_login import current_user, login_required, login_user, logout_user
 from oauth2client import client
 
-from See3D import app, db, login_manager
-from See3D.models import User
+from . import app, db, login_manager
+from .forms import SubmitForm
+from .models import User, Request
 
 @login_manager.user_loader
 def load_user(user_id):
@@ -24,21 +25,7 @@ def about():
 
 @app.route('/gallery/')
 def gallery():
-    requests = []
-
-    requests.append({
-        "id": 5738493,
-        "title": "Castle",
-        "description": "A small, basic castle would do just fine.",
-        "user": {"email":"jbr101@gmail.com"}
-    })
-
-    requests.append({
-        "id": 2023423,
-        "title": "House",
-        "description": "Make it the largest mansion you've ever felt.",
-        "user": {"email":"aubrymanson@yahoo.com"}
-    })
+    requests = Request.query.all()
 
     return flask.render_template('gallery.html', title="Gallery", requests=requests)
 
@@ -46,10 +33,22 @@ def gallery():
 def request(request_id):
     return "Request {}".format(request_id)
 
-@app.route('/submit/')
+@app.route('/submit/', methods=['GET', 'POST'])
 @login_required
 def submit():
-    return "This is where users will submit requests."
+    form = SubmitForm()
+
+    if form.validate_on_submit():
+        new_request = Request(title=form.title.data,
+                              description=form.description.data,
+                              email=current_user.email)
+
+        db.session.add(new_request)
+        db.session.commit()
+
+        return flask.redirect(flask.url_for('gallery'))
+
+    return flask.render_template('submit.html', title="Submit Request", form=form)
 
 @app.route('/profile/')
 @login_required
@@ -63,7 +62,6 @@ def oauth2callback():
         scope='email profile',
         redirect_uri=flask.url_for('oauth2callback', _external=True),
     )
-    flow.params['include_granted_scopes'] = "true"
 
     # Redirect user to Google sign-in.
     if 'code' not in flask.request.args:
