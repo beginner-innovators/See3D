@@ -15,5 +15,5 @@ login_manager.init_app(app)
 
 login_manager.login_view = 'oauth2callback'
 
-# Import data from each file at the end.
-from . import views, models
+# Import views at end to avoid a circular reference
+from . import views
