@@ -19,19 +19,13 @@ def index():
     return flask.render_template('index.html')
 
 @app.route('/about/')
-@login_required
 def about():
     return flask.render_template('about.html', title="About")
 
 @app.route('/gallery/')
 def gallery():
     requests = Request.query.all()
-
     return flask.render_template('gallery.html', title="Gallery", requests=requests)
-
-@app.route('/requests/<request_id>/')
-def request(request_id):
-    return "Request {}".format(request_id)
 
 @app.route('/submit/', methods=['GET', 'POST'])
 @login_required
@@ -53,7 +47,8 @@ def submit():
 @app.route('/profile/')
 @login_required
 def profile():
-    return flask.render_template('profile.html', title="Profile")
+    requests = Request.query.filter_by(email=current_user.email).all()
+    return flask.render_template('profile.html', title="Profile", requests=requests)
 
 @app.route('/oauth2callback')
 def oauth2callback():
@@ -64,6 +59,14 @@ def oauth2callback():
     )
 
     # Redirect user to Google sign-in.
+    if 'error' in flask.request.args:
+        if flask.request.args.get('error') == 'access_denied':
+            flask.flash("You denied access")
+        else:
+            flask.flash("Some kind of error encountered during authorization.")
+
+        return flask.redirect(flask.url_for('index'))
+
     if 'code' not in flask.request.args:
         auth_uri = flow.step1_get_authorize_url()
         return flask.redirect(auth_uri)
@@ -72,8 +75,10 @@ def oauth2callback():
     else:
         auth_code = flask.request.args.get('code')
         credentials = flow.step2_exchange(auth_code)
+		
+        flask.session['credentials'] = credentials.to_json()
 
-        user_info = json.loads(credentials.to_json())
+        user_info = json.loads(flask.session['credentials'])
 
         sub = user_info["id_token"]["sub"]        # Primary identification of Google account
         user = User.query.filter_by(sub=sub).first()
@@ -92,5 +97,23 @@ def oauth2callback():
 @app.route('/logout/')
 @login_required
 def logout():
+    if 'credentials' in flask.session:
+        credentials = client.OAuth2Credentials.from_json(flask.session['credentials'])
+        credentials.revoke(httplib2.Http())
+
     logout_user()
     return flask.redirect('index')
+
+@app.route('/del_request/<request_id>/')
+@login_required
+def del_request(request_id):
+    request = Request.query.get(int(request_id))
+    
+    if request.email == current_user.email:
+        db.session.delete(request)
+        db.session.commit()
+        
+        return flask.redirect(flask.url_for('profile'))
+    
+    else:
+        return flask.redirect(flask.url_for('index'))

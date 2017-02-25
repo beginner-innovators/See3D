@@ -1,11 +1,41 @@
 {% extends "base.html" %}
 
 {% block content %}
-    {% set name, address = current_user.email.split('@') %}
-    <div><h2>Hello, <strong>{{ name|e }}</strong>!</h2></div>
-    <div>
-        <h3>Options</h3>
-        <ul>
-            <li><a href={{ url_for("logout") }}>Log out</a></li>
-        </ul>
+{% set name, address = current_user.email.split('@') %}
+<div class="container">
+  <div class="jumbotron">
+    <h2>Hello, <strong>{{ name|e }}</strong>, welcome to your profile!</h2>
+  </div>
+  <div class="page-header">
+    <h3>Your Active Requests</h3>
+  </div>
+  <div>
+    <table class="table table-hover table-bordered">
+      <thead>
+        <tr>
+          <th>Title</th>
+          <th>Description</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for request in requests -%}
+        <tr>
+          <td>{{ request.title|e }}</td>
+          <td>{{ request.description|e }}</td>
+          <td><a href={{ url_for('del_request', request_id=request.id) }}>Delete this post</a></td>
+        </tr>
+        {% endfor -%}
+      </tbody>
+    </table>
+  </div>
+  <div class="page-header">
+    <h3>Options</h3>
+  </div>
+  <div>
+    <ul>
+      <li><a href={{ url_for("logout") }}>Log out</a></li>
+      <li><p>Delete account</p></li>
+    </ul>
+  </div>
+</div>
 {% endblock %}

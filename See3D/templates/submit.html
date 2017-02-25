@@ -1,12 +1,23 @@
 {% extends "base.html" %}
 
 {% block content %}
-  <h2>Submit a request</h2>
-  <p>Include a descriptive body that states precisely what kind of model you want. Don't worry about making a mistake, you can always update this again later.</p>
+<div class="container">
+  <div class="page-header">
+    <h2>Submit a request</h2>
+    <p>Include a descriptive body that states precisely what kind of model you want. Don't worry about making a mistake, you can always update this again later.</p>
+  </div>
   <form action="" method="post">
     {{ form.csrf_token() }}
-    {{ form.title(size=20, placeholder='Title') }} <br>
-    {{ form.description(cols="20", rows="30", placeholder='Description') }} <br>
-    <input type="submit" value="Submit Request"> <a href={{ url_for('gallery') }}>Cancel</a>
+    <div class="form-group">
+      <label for="input_title">Title</label>
+      {{ form.title(class="form-control", id="input_title", placeholder='Title') }}
+    </div>
+    <div class="form-group">
+      <label for="input_description">Description</label>
+      {{ form.description(class="form-control", id="input_description", placeholder='Description') }}
+    </div>
+    <button type="submit" class="btn btn-default">Submit Request</button>
+    <a href={{ url_for('gallery') }} class="btn btn-link">Cancel</a>
   </form>
+</div>
 {% endblock %}
