@@ -1,5 +1,5 @@
-# See3D - Showcase Project
+# See3D
 
 www.see3d.org
 
-Created by the SCD Tech Club for TechOlympics (https://techolympics.org/)
+Created by the SCD Tech Club
