@@ -52,6 +52,7 @@ def profile():
 
 @app.route('/oauth2callback')
 def oauth2callback():
+    # Create Google's provided object for sending a login request.
     flow = client.flow_from_clientsecrets(
         '../client_secrets.json',
         scope='email profile',
@@ -75,7 +76,7 @@ def oauth2callback():
     else:
         auth_code = flask.request.args.get('code')
         credentials = flow.step2_exchange(auth_code)
-		
+
         flask.session['credentials'] = credentials.to_json()
 
         user_info = json.loads(flask.session['credentials'])
@@ -108,12 +109,12 @@ def logout():
 @login_required
 def del_request(request_id):
     request = Request.query.get(int(request_id))
-    
+
     if request.email == current_user.email:
         db.session.delete(request)
         db.session.commit()
-        
+
         return flask.redirect(flask.url_for('profile'))
-    
+
     else:
         return flask.redirect(flask.url_for('index'))

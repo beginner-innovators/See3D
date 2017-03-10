@@ -1,4 +1,5 @@
 import os
+
 from secret_key import key
 
 basedir = os.path.abspath(os.path.dirname(__file__))
