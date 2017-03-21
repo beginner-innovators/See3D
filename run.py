@@ -4,16 +4,16 @@ import ssl
 
 from See3D import app
 
-parser = argparse.ArgumentParser(description='Start up the website')
+parser = argparse.ArgumentParser(description='Start up the server for See3D.')
 
 parser.add_argument('-d', '--debug', action='store_true',
-                    help='Run the website in debug mode.')
+                    help='run the server in debug mode.')
 parser.add_argument('--host', default='127.0.0.1',
-                    help='Specify the ip address on which to host the server.')
+                    help='specify the ip address on which to run the server')
 parser.add_argument('--port', type=int, default=5000,
-                    help='Specify the port on which to host the server.')
+                    help='specify the port on which to run the server')
 parser.add_argument('--https', nargs=2, metavar=('CERT', 'KEY'),
-                    help='Run the server on https using the given SSL certificate and key.')
+                    help='run the server on https given the paths to the SSL certificate and key')
 
 args = parser.parse_args()
 
