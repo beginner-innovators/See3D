@@ -24,8 +24,7 @@ def about():
 
 @app.route('/gallery/')
 def gallery():
-    requests = Request.query.all()
-    return flask.render_template('gallery.html', title="Gallery", requests=requests)
+    return flask.render_template('gallery.html', title="Gallery", requests=Request.query.all())
 
 @app.route('/submit/', methods=['GET', 'POST'])
 @login_required
@@ -34,8 +33,9 @@ def submit():
 
     if form.validate_on_submit():
         new_request = Request(title=form.title.data,
-                              description=form.description.data,
-                              email=current_user.email)
+                              description=form.description.data)
+
+        current_user.requests.append(new_request)
 
         db.session.add(new_request)
         db.session.commit()
@@ -47,8 +47,7 @@ def submit():
 @app.route('/profile/')
 @login_required
 def profile():
-    requests = Request.query.filter_by(email=current_user.email).all()
-    return flask.render_template('profile.html', title="Profile", requests=requests)
+    return flask.render_template('profile.html', title="Profile", requests=current_user.requests)
 
 @app.route('/oauth2callback')
 def oauth2callback():
@@ -87,7 +86,7 @@ def oauth2callback():
         # Add user to database if not already there.
         if not user:
             email = user_info["id_token"]["email"]
-            user = User(email=email, creator=False, sub=sub)
+            user = User(sub=sub, is_creator=False, email=email)
 
             db.session.add(user)
             db.session.commit()
@@ -110,7 +109,7 @@ def logout():
 def del_request(request_id):
     request = Request.query.get(int(request_id))
 
-    if request.email == current_user.email:
+    if request.user_id == current_user.id:
         db.session.delete(request)
         db.session.commit()
 

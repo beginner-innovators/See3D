@@ -32,7 +32,7 @@
         <tr>
           <td>{{ request.title|e }}</td>
           <td>{{ request.description|e }}</td>
-          <td>{{ request.email|e }}</td>
+          <td>{{ request.user.email|e }}</td>
         </tr>
         {% endfor -%}
       </tbody>
