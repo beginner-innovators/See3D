@@ -1,11 +1,13 @@
-{% extends "base.html" %}
+{% extends "navbar.html" %}
 
-{% block content %}
+{% block navbar_body %}
 <div class="container">
+
   <div class="page-header">
     <h2>Submit a request</h2>
     <p>Include a descriptive body that states precisely what kind of model you want. Don't worry about making a mistake, you can always update this again later.</p>
   </div>
+
   <form action="" method="post">
     {{ form.csrf_token() }}
     <div class="form-group">
@@ -19,5 +21,6 @@
     <button type="submit" class="btn btn-default">Submit Request</button>
     <a href={{ url_for('gallery') }} class="btn btn-link">Cancel</a>
   </form>
+
 </div>
 {% endblock %}

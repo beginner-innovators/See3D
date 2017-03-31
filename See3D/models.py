@@ -10,6 +10,7 @@ class User(UserMixin, db.Model):
     
     creation_date = db.Column(db.DateTime)
     email = db.Column(db.String(254))
+    name = db.Column(db.String(36))
 
     requests = db.relationship('Request', backref='user', lazy='dynamic')
 

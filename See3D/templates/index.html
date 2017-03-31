@@ -1,10 +1,33 @@
 {% extends "base.html" %}
 
-{% block content %}
-<div class="container theme-showcase" role="main">
-  <div class="jumbotron">
-    <h1 class="text-center">Welcome to See3D!</h1>
-    <h1 class="text-center"><small>A community-driven effort to bring 3D printed models into the hands of the blind and visually impaired.</small></h1>
-  </div>
+{% block head %}
+<meta name="google-signin-client_id" content="151432626794-3svgnd49h2fjmngk1cuatmrmna5n05jl.apps.googleusercontent.com">
+<meta name="google-signin-scope" content="profile email">
+<script src="https://apis.google.com/js/platform.js" async defer></script>
+{% endblock %}
+
+{% block body %}
+<div class="container">
+  <h1 class="text-center">Welcome to See3D!</h1>
+  <h1 class="text-center"><small>A community-driven effort to bring 3D printed models into the hands of the blind and visually impaired.</small></h1>
+
+  <div class="g-signin2" data-onsuccess="onSignIn" data-theme="light"></div>
+  <script>
+    function onSignIn(googleUser) {
+      // Get ID token from successfully logged in user (requires HTTPS).
+      var id_token = googleUser.getAuthResponse().id_token;
+      var csrf_token = '{{ csrf_token() }}';
+    
+      // Send the ID token to backend with an HTTPS POST request.
+      var xhr = new XMLHttpRequest();
+      xhr.open('POST', '{{ url_for("oauth2callback") }}');
+      xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+      xhr.setRequestHeader('X-CSRFToken', csrf_token);
+      xhr.onload = function() {
+        document.location = {{ url_for('gallery') }};
+      }
+      xhr.send('idtoken=' + id_token);
+    }
+  </script>
 </div>
 {% endblock %}

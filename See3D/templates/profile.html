@@ -1,14 +1,35 @@
-{% extends "base.html" %}
+{% extends "navbar.html" %}
 
-{% block content %}
-{% set name, address = current_user.email.split('@') %}
+{% block navbar_head %}
+<meta name="google-signin-client_id" content="151432626794-3svgnd49h2fjmngk1cuatmrmna5n05jl.apps.googleusercontent.com">
+{% endblock %}
+
+{% block navbar_body %}
+
+<script>
+  function signOut() {
+    var auth2 = gapi.auth2.getAuthInstance();
+    auth2.signOut().then(function () {
+      document.location = {{ url_for('index') }};
+    });
+  }
+  function onLoad() {
+    gapi.load('auth2', function() {
+      gapi.auth2.init();
+    });
+  }
+</script>
+
 <div class="container">
+
   <div class="jumbotron">
-    <h2>Hello, <strong>{{ name|e }}</strong>, welcome to your profile!</h2>
+    <h2>Hello, <strong>{{ current_user.name|e }}</strong>, welcome to your profile!</h2>
   </div>
+
   <div class="page-header">
     <h3>Your Active Requests</h3>
   </div>
+
   <div>
     <table class="table table-hover table-bordered">
       <thead>
@@ -18,24 +39,29 @@
         </tr>
       </thead>
       <tbody>
-        {% for request in requests -%}
+        {% for request in requests %}
         <tr>
           <td>{{ request.title|e }}</td>
           <td>{{ request.description|e }}</td>
           <td><a href={{ url_for('del_request', request_id=request.id) }}>Delete this post</a></td>
         </tr>
-        {% endfor -%}
+        {% endfor %}
       </tbody>
     </table>
   </div>
+
   <div class="page-header">
     <h3>Options</h3>
   </div>
+
   <div>
     <ul>
-      <li><a href={{ url_for("logout") }}>Log out</a></li>
+      <li><a href="javascript:void(0)" onclick="signOut();">Sign out</a></li>
       <li><p>Delete account</p></li>
     </ul>
   </div>
+
 </div>
+
+<script src="https://apis.google.com/js/platform.js?onload=onLoad" async defer></script>
 {% endblock %}
