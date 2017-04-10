@@ -131,3 +131,4 @@ ENV/
 # VIM #
 #######
 *.un~
+secret_key.py
