@@ -59,6 +59,7 @@ def gallery():
     """Render a scrollable gallery of all currently active requests."""
     if current_user.is_creator is True:
         return render_template('gallery.html', title="Gallery", requests=Request.query.all())
+
     else:
         return redirect(url_for('profile'))
 
@@ -95,19 +96,18 @@ def profile():
 def logout():
     """Log the user out of the current session and return to the homepage."""
     logout_user()
+
     return redirect('index')
 
 
-@app.route('/del_request/<request_id>/')
+@app.route('/delete_request/<request_id>/')
 @login_required
-def del_request(request_id):
+def delete_request(request_id):
+    """Delete the specified request if it belongs to the currently logged in user."""
     request = Request.query.get(int(request_id))
 
     if request.user_id == current_user.id:
         db.session.delete(request)
         db.session.commit()
 
-        return redirect(url_for('profile'))
-
-    else:
-        return redirect(url_for('gallery'))
+    return redirect(url_for('profile'))
