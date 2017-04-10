@@ -35,7 +35,11 @@
           </li>
         </ul>
         <ul class="nav navbar-nav navbar-right">
+          {% if current_user.is_creator %}
+          <li><a href={{ url_for('profile') }}><span class="badge badge-default">Creator</span> {{ current_user.email|e }}</a></li>
+          {% else %}
           <li><a href={{ url_for('profile') }}>{{ current_user.email|e }}</a></li>
+          {% endif %}
         </ul>
       </div>
 
