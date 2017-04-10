@@ -6,8 +6,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
     <link rel="icon" href="{{ url_for('static', filename='favicon.ico') }}">
-    
-    {% block head %}{% endblock %}
 
     {% if title %}
     <title>{{ title }} - See3D</title>
@@ -17,9 +15,11 @@
 
     <!-- BootstrapCDN -->
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
-    
+
     <!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->
     <link href="{{ url_for('static', filename='css/ie10-viewport-bug-workaround.css') }}" rel="stylesheet">
+
+    {% block head %}{% endblock %}
   </head>
   <body>
     {% block body %}{% endblock %}

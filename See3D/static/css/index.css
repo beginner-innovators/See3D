@@ -1,0 +1,35 @@
+html, body, .container {
+	height: 100%;
+}
+
+body {
+	background-color: #37474f;
+}
+
+.container {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+}
+
+.header {
+	margin: auto;
+	max-width: 470px;
+	text-align: center;
+}
+
+.header h1, .header p {
+	color: white;
+}
+
+.header p {
+	font-size: 1.5em;
+}
+
+.g-signin2 {
+	width: 100%;
+}
+
+.g-signin2 > div {
+	margin: 0 auto;
+}

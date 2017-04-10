@@ -26,11 +26,14 @@
     <h2>Hello, <strong>{{ current_user.name|e }}</strong>, welcome to your profile!</h2>
   </div>
 
+  <a href={{ url_for('submit') }} class="btn btn-success">Submit Request</a>
+
   <div class="page-header">
     <h3>Your Active Requests</h3>
   </div>
 
   <div>
+    {% if requests.count() > 0 %}
     <table class="table table-hover table-bordered">
       <thead>
         <tr>
@@ -41,13 +44,21 @@
       <tbody>
         {% for request in requests %}
         <tr>
-          <td>{{ request.title|e }}</td>
-          <td>{{ request.description|e }}</td>
-          <td><a href={{ url_for('del_request', request_id=request.id) }}>Delete this post</a></td>
+          <td class="col-md-4">{{ request.title|e }}</td>
+          <td class="col-md-7">{{ request.description|e }}</td>
+          <td class="col-md-1">
+            <a class="btn btn-default" href={{ url_for('del_request', request_id=request.id) }} role="button">
+              <span class="glyphicon glyphicon-trash" aria-hidden="true"></span>
+              <span class="sr-only">Delete this post</span>
+            </a>
+          </td>
         </tr>
         {% endfor %}
       </tbody>
     </table>
+    {% else %}
+    <p>No requests yet! Click the "Submit Request" button to submit your first request.</p>
+    {% endif %}
   </div>
 
   <div class="page-header">

@@ -50,14 +50,17 @@ def oauth2callback():
         return user.email
 
     elif request.method == 'GET':
-        return redirect(url_for('profile'))
+        return redirect(url_for('index'))
 
 
 @app.route('/gallery/')
 @login_required
 def gallery():
     """Render a scrollable gallery of all currently active requests."""
-    return render_template('gallery.html', title="Gallery", requests=Request.query.all())
+    if current_user.is_creator is True:
+        return render_template('gallery.html', title="Gallery", requests=Request.query.all())
+    else:
+        return redirect(url_for('profile'))
 
 
 @app.route('/submit/', methods=['GET', 'POST'])
