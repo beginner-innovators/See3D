@@ -5,7 +5,6 @@
 {% endblock %}
 
 {% block navbar_body %}
-
 <script>
   function signOut() {
     var auth2 = gapi.auth2.getAuthInstance();
@@ -23,13 +22,16 @@
 <div class="container">
 
   <div class="jumbotron">
-    <h2>Hello, <strong>{{ current_user.name|e }}</strong>, welcome to your profile!</h2>
+    <h1>Your profile</h1>
+    <p>Currently logged in as <i>{{ current_user.email|e }}</i></p>
   </div>
 
-  <a href={{ url_for('submit') }} class="btn btn-success">Submit Request</a>
-
   <div class="page-header">
-    <h3>Your Active Requests</h3>
+    {% if current_user.is_creator %}
+    <h2>Your Current Projects</h2>
+    {% else %}
+    <h2>Your Active Requests</h2>
+    {% endif %}
   </div>
 
   <div>
@@ -44,25 +46,34 @@
       <tbody>
         {% for request in requests %}
         <tr>
+          {% if current_user.is_creator %}
+          <td class="col-md-4">{{ request.title|e }}</td>
+          <td class="col-md-8">{{ request.description|e }}</td>
+          {% else %}
           <td class="col-md-4">{{ request.title|e }}</td>
           <td class="col-md-7">{{ request.description|e }}</td>
           <td class="col-md-1">
-            <a class="btn btn-default" href={{ url_for('del_request', request_id=request.id) }} role="button">
+            <a class="btn btn-default" href={{ url_for('delete_request', request_id=request.id) }} role="button">
               <span class="glyphicon glyphicon-trash" aria-hidden="true"></span>
               <span class="sr-only">Delete this post</span>
             </a>
           </td>
+          {% endif %}
         </tr>
         {% endfor %}
       </tbody>
     </table>
     {% else %}
-    <p>No requests yet! Click the "Submit Request" button to submit your first request.</p>
+      {% if current_user.is_creator %}
+      <p>You have not accepted any requests yet. Head over to the <a href={{ url_for('gallery') }}>gallery</a> to find some!</p>
+      {% else %}
+      <p>No requests yet! Click <a href={{ url_for('submit') }}>here</a> to create one.</p>
+      {% endif %}
     {% endif %}
   </div>
 
   <div class="page-header">
-    <h3>Options</h3>
+    <h2>Options</h2>
   </div>
 
   <div>
