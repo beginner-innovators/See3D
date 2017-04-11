@@ -21,8 +21,8 @@ class User(UserMixin, db.Model):
 class Request(db.Model):
     id = db.Column(db.Integer, primary_key=True)
 
-    title = db.Column(db.String(16))
-    description = db.Column(db.String(64))
+    title = db.Column(db.String(100))
+    description = db.Column(db.String(10000))
     
     creation_date = db.Column(db.DateTime)
 

@@ -7,7 +7,7 @@ class SubmitForm(FlaskForm):
         'Title',
         validators=[
             InputRequired(message="A title is required."),
-            Length(max=31, message="The title must be less than 32 characters.")
+            Length(max=64, message="The title must be 100 characters or less.")
         ]
     )
 
@@ -15,6 +15,6 @@ class SubmitForm(FlaskForm):
         'Description',
         validators=[
             InputRequired(message="A description is required."),
-            Length(max=1023, message="The description must be less than 1024 characters.")
+            Length(max=1024, message="The description must be 10000 characters or less.")
         ]
     )
