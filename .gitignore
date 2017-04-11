@@ -1,5 +1,6 @@
 *.db
 secret_key.py
+*.un~
 
 # OS generated files #
 ######################
