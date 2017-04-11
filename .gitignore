@@ -1,31 +1,5 @@
-# Compiled source #
-###################
-*.com
-*.class
-*.dll
-*.exe
-*.o
-*.so
-
-# Packages #
-############
-# it's better to unpack these files and commit the raw source
-# git has its own built in compression methods
-*.7z
-*.dmg
-*.gz
-*.iso
-*.jar
-*.rar
-*.tar
-*.zip
-
-# Logs and databases #
-######################
-*.log
-*.sql
-*.sqlite
 *.db
+secret_key.py
 
 # OS generated files #
 ######################
@@ -127,8 +101,3 @@ ENV/
 
 # Rope project settings
 .ropeproject
-
-# VIM #
-#######
-*.un~
-secret_key.py
