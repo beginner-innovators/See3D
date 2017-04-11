@@ -2,15 +2,14 @@
 
 {% block navbar_body %}
 <div class="container">
-  <div>
+  <div class="jumbotron">
     <h1>Welcome to your profile!</h1>
-    <p>You are currently logged in as <i>{{ current_user.email|e }}</i></p>
   </div>
   <div class="page-header">
     {% if current_user.is_creator %}
     <h2>Current Projects</h2>
     {% else %}
-    <h2>Pending Requests</h2>
+    <h2>Your Requests</h2>
     {% endif %}
   </div>
   <div>
@@ -20,13 +19,16 @@
         <tr>
           <th>Title</th>
           <th>Description</th>
+          <th>Edit</th>
         </tr>
       </thead>
       <tbody>
         {% for request in requests %}
+        {% set request_id = request.id %}
         <tr>
           <td>{{ request.title|truncate(50)|e }}</td>
           <td>{{ request.description|truncate(75)|e }}</td>
+          <td><a href="{{ url_for('view_request', request_id=request_id) }}"><span class="glyphicon glyphicon-pencil"></span></a></td>
         </tr>
         {% endfor %}
       </tbody>
@@ -34,7 +36,7 @@
     {% else %}
 
     {% if current_user.is_creator %}
-    <p>You have not accepted any requests yet. Head over to the <a href={{ url_for('gallery') }}>gallery</a> to find some!</p>
+    <p>You have not accepted any requests yet. Head over to the <a href={{ url_for('gallery') }}>gallery</a> to find some! (You can accept a maximum of 3)</p>
     {% else %}
     <p>No requests yet! Click <a href={{ url_for('submit') }}>here</a> to create one.</p>
     {% endif %}

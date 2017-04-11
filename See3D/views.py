@@ -1,4 +1,4 @@
-from flask import flash, redirect, render_template, request, url_for
+from flask import flash, redirect, render_template, request, session, url_for
 from flask_login import current_user, login_required, login_user, logout_user
 from oauth2client import client, crypt
 
@@ -53,6 +53,13 @@ def oauth2callback():
         return redirect(url_for('index'))
 
 
+@app.route('/about/')
+@login_required
+def about():
+    """Render a simple about page."""
+    return render_template('about.html', title="Our Project")
+        
+
 @app.route('/gallery/')
 @login_required
 def gallery():
@@ -81,7 +88,7 @@ def submit():
 
         return redirect(url_for('gallery'))
 
-    return render_template('submit.html', title="Submit Request", form=form)
+    return render_template('submit.html', title="Create Request", form=form)
 
 
 @app.route('/profile/')
@@ -89,7 +96,7 @@ def submit():
 def profile():
     """Show a basic profile page including a user's active requests and a signout page."""
     return render_template('profile.html', title="Profile", requests=current_user.requests)
-
+    
 
 @app.route('/logout/')
 @login_required
@@ -100,14 +107,41 @@ def logout():
     return redirect('index')
 
 
-@app.route('/delete_request/<request_id>/')
+@app.route('/request/<request_id>/')
 @login_required
-def delete_request(request_id):
-    """Delete the specified request if it belongs to the currently logged in user."""
-    request = Request.query.get(int(request_id))
+def view_request(request_id):
+    """Render the specified request if it belongs to the logged-in user."""
+    current_request = Request.query.get(int(request_id))
+    
+    # Store the current request as a cookie in the session so that it can be accepted or deleted in a different page.
+    session['current_request_id'] = request_id
+    
+    if current_user.is_creator or current_request.user_id == current_user.id:
+        return render_template('view_request.html', title=current_request.title, current_request=current_request)
+    else:
+        return redirect(url_for('profile'))
 
-    if request.user_id == current_user.id:
-        db.session.delete(request)
+
+@app.route('/accept_request/')
+@login_required
+def accept_request():
+    current_request = Request.query.get(int(session['current_request_id']))
+
+    if current_user.is_creator and len(list(current_user.requests)) < 3:
+        current_user.requests.append(current_request)
+        db.session.commit()
+    
+    return redirect('profile')
+        
+        
+@app.route('/delete_request/')
+@login_required
+def delete_request():
+    """Delete the specified request if it belongs to the currently logged in user."""
+    current_request = Request.query.get(int(session['current_request_id']))
+
+    if current_request.user_id == current_user.id:
+        db.session.delete(current_request)
         db.session.commit()
 
     return redirect(url_for('profile'))

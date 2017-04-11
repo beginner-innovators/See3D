@@ -1,0 +1,21 @@
+{% extends "navbar.html" %}
+
+{% block navbar_body %}
+<div class="container">
+  <div class="row">
+    <div class="col-md-8">
+      <div class="page-header">
+        <h1 style="word-wrap:break-word;">{{ current_request.title|e }}</h1>
+      </div>
+      <p style="word-wrap:break-word;">{{ current_request.description|e }}</p>
+    </div>
+    <div class="col-md-4">
+      {% if current_user.is_creator %}
+      <a class="btn btn-primary btn-block" href="{{ url_for('accept_request') }}" role="button">Accept this request</a>
+      {% else %}
+      <a class="btn btn-default btn-block" href="{{ url_for('delete_request') }}" role="button"><span class="glyphicon glyphicon-trash" aria-hidden="true"></span> Delete this request</a>
+      {% endif %}
+    </div>
+  </div>
+</div>
+{% endblock %}

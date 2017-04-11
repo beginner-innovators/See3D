@@ -8,7 +8,7 @@
     <link rel="icon" href="{{ url_for('static', filename='favicon.ico') }}">
 
     {% if title %}
-    <title>{{ title }} - See3D</title>
+    <title>{{ title|e }} - See3D</title>
     {% else %}
     <title>See3D</title>
     {% endif %}
