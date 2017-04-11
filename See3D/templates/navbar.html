@@ -4,50 +4,66 @@
 <meta http-equiv="content-type" content="text/html; charset=UTF-8">
 <!-- Custom styles for this template -->
 <link href="{{ url_for('static', filename='css/navbar-fixed-top.css') }}" rel="stylesheet">
+<meta name="google-signin-client_id" content="151432626794-3svgnd49h2fjmngk1cuatmrmna5n05jl.apps.googleusercontent.com">
 
 {% block navbar_head %}{% endblock %}
 {% endblock %}
 
 {% block body %}
-  <nav class="navbar navbar-default navbar-fixed-top">
-    <div class="container">
-
-      <div class="navbar-header">
-        <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
-          <span class="sr-only">Toggle navigation</span>
-          <span class="icon-bar"></span>
-          <span class="icon-bar"></span>
-          <span class="icon-bar"></span>
-        </button>
-        <a class="navbar-brand" href={{ url_for('profile') }}>See3D</a>
-      </div>
-
-      <div id="navbar" class="navbar-collapse collapse">
-        <ul class="nav navbar-nav">
-          <li>
-            {% if current_user.is_creator %}
-            <a href={{ url_for('gallery') }}>Gallery</a>
-            {% else %}
-            <form action={{ url_for('submit') }}>
-              <button class="btn btn-default navbar-btn">Request a model</button>
-            </form>
-            {% endif %}
-          </li>
-        </ul>
-        <ul class="nav navbar-nav navbar-right">
-          {% if current_user.is_creator %}
-          <li><a href={{ url_for('profile') }}><span class="badge badge-default">Creator</span> {{ current_user.email|e }}</a></li>
-          {% else %}
-          <li><a href={{ url_for('profile') }}>{{ current_user.email|e }}</a></li>
-          {% endif %}
-        </ul>
-      </div>
-
+<script>
+  function signOut() {
+    var auth2 = gapi.auth2.getAuthInstance();
+    auth2.signOut().then(function () {
+      window.location = {{ url_for('index') }};
+    });
+  }
+  function onLoad() {
+    gapi.load('auth2', function() {
+      gapi.auth2.init();
+    });
+  }
+</script>
+<nav class="navbar navbar-default navbar-fixed-top">
+  <div class="container">
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
+        <span class="sr-only">Toggle navigation</span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <a class="navbar-brand" href={{ url_for('profile') }}>See3D</a>
     </div>
-  </nav>
+    <div id="navbar" class="navbar-collapse collapse">
+      <ul class="nav navbar-nav">
+        <li>
+          {% if current_user.is_creator %}
+          <a href={{ url_for('gallery') }}>Gallery</a>
+          {% else %}
+          <form action={{ url_for('submit') }}>
+            <button class="btn btn-default navbar-btn">Request a model</button>
+          </form>
+          {% endif %}
+        </li>
+      </ul>
+      <ul class="nav navbar-nav navbar-right"> 
+        <li class="dropdown">
+          <a href="javascript:void(0)" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">{{ current_user.email|e }} <span class="caret"></span></a>
+          <ul class="dropdown-menu">
+            <li><a href={{ url_for('profile') }}>Profile</a></li>
+            <li><a href={{ url_for('profile') }}>Settings</a></li>
+            <li role="separator" class="divider"></li>
+            <li><a href="javascript:void(0)" onclick="signOut();">Sign out</a></li>
+          </ul>
+        </li>
+      </ul>
+    </div>
+  </div>
+</nav>
 
-  {% block navbar_body %}{% endblock %}
+{% block navbar_body %}{% endblock %}
 
-  <!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->
-  <script src="{{ url_for('static', filename='js/ie10-viewport-bug-workaround.js') }}"></script>
+<!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->
+<script src="{{ url_for('static', filename='js/ie10-viewport-bug-workaround.js') }}"></script>
+<script src="https://apis.google.com/js/platform.js?onload=onLoad" async defer></script>
 {% endblock %}

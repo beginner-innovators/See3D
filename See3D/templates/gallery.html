@@ -2,12 +2,13 @@
 
 {% block navbar_body %}
 <div class="container">
-
-  <div class="jumbotron">
+  <div>
     <h1>Welcome to the Gallery!</h1>
-    <p>As a creator, here you can browse and accept requests.</p>
+    <p>As a creator, here you can browse and accept requests. Note that no one else is able to work on a request once it is accepted, so be sure to complete it in a timely manner!</p>
   </div>
-
+  <div class="page-header">
+    <h2>Available Requests</h2>
+  </div>
   <div>
     <table class="table table-hover table-bordered">
       <thead>
@@ -20,14 +21,13 @@
       <tbody>
         {% for request in requests %}
         <tr>
-          <td>{{ request.title|e }}</td>
-          <td>{{ request.description|e }}</td>
+          <td>{{ request.title|truncate(50)|e }}</td>
+          <td>{{ request.description|truncate(75)|e }}</td>
           <td>{{ request.user.email|e }}</td>
         </tr>
         {% endfor %}
       </tbody>
     </table>
   </div>
-
 </div>
 {% endblock %}

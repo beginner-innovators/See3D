@@ -1,39 +1,18 @@
 {% extends "navbar.html" %}
 
-{% block navbar_head %}
-<meta name="google-signin-client_id" content="151432626794-3svgnd49h2fjmngk1cuatmrmna5n05jl.apps.googleusercontent.com">
-{% endblock %}
-
 {% block navbar_body %}
-<script>
-  function signOut() {
-    var auth2 = gapi.auth2.getAuthInstance();
-    auth2.signOut().then(function () {
-      document.location = {{ url_for('index') }};
-    });
-  }
-  function onLoad() {
-    gapi.load('auth2', function() {
-      gapi.auth2.init();
-    });
-  }
-</script>
-
 <div class="container">
-
-  <div class="jumbotron">
-    <h1>Your profile</h1>
-    <p>Currently logged in as <i>{{ current_user.email|e }}</i></p>
+  <div>
+    <h1>Welcome to your profile!</h1>
+    <p>You are currently logged in as <i>{{ current_user.email|e }}</i></p>
   </div>
-
   <div class="page-header">
     {% if current_user.is_creator %}
-    <h2>Your Current Projects</h2>
+    <h2>Current Projects</h2>
     {% else %}
-    <h2>Your Active Requests</h2>
+    <h2>Pending Requests</h2>
     {% endif %}
   </div>
-
   <div>
     {% if requests.count() > 0 %}
     <table class="table table-hover table-bordered">
@@ -46,44 +25,21 @@
       <tbody>
         {% for request in requests %}
         <tr>
-          {% if current_user.is_creator %}
-          <td class="col-md-4">{{ request.title|e }}</td>
-          <td class="col-md-8">{{ request.description|e }}</td>
-          {% else %}
-          <td class="col-md-4">{{ request.title|e }}</td>
-          <td class="col-md-7">{{ request.description|e }}</td>
-          <td class="col-md-1">
-            <a class="btn btn-default" href={{ url_for('delete_request', request_id=request.id) }} role="button">
-              <span class="glyphicon glyphicon-trash" aria-hidden="true"></span>
-              <span class="sr-only">Delete this post</span>
-            </a>
-          </td>
-          {% endif %}
+          <td>{{ request.title|truncate(50)|e }}</td>
+          <td>{{ request.description|truncate(75)|e }}</td>
         </tr>
         {% endfor %}
       </tbody>
     </table>
     {% else %}
-      {% if current_user.is_creator %}
-      <p>You have not accepted any requests yet. Head over to the <a href={{ url_for('gallery') }}>gallery</a> to find some!</p>
-      {% else %}
-      <p>No requests yet! Click <a href={{ url_for('submit') }}>here</a> to create one.</p>
-      {% endif %}
+
+    {% if current_user.is_creator %}
+    <p>You have not accepted any requests yet. Head over to the <a href={{ url_for('gallery') }}>gallery</a> to find some!</p>
+    {% else %}
+    <p>No requests yet! Click <a href={{ url_for('submit') }}>here</a> to create one.</p>
+    {% endif %}
+
     {% endif %}
   </div>
-
-  <div class="page-header">
-    <h2>Options</h2>
-  </div>
-
-  <div>
-    <ul>
-      <li><a href="javascript:void(0)" onclick="signOut();">Sign out</a></li>
-      <li><p>Delete account</p></li>
-    </ul>
-  </div>
-
 </div>
-
-<script src="https://apis.google.com/js/platform.js?onload=onLoad" async defer></script>
 {% endblock %}

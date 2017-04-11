@@ -28,7 +28,7 @@
         xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
         xhr.setRequestHeader('X-CSRFToken', csrf_token);
         xhr.onload = function() {
-          document.location = {{ url_for('profile') }};
+          window.location = {{ url_for('profile') }};
         }
         xhr.send('idtoken=' + id_token);
       }
